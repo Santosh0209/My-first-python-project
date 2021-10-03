@@ -129,6 +129,8 @@ class AlienInvasion:
         """Start a new game when player cLicks play."""
         button_clicked = self.play_button.rect.collidepoint(mouse_pos)
         if button_clicked and not self.stats.game_active:
+            # Reset the game settings.
+            self.settings.initialize_dynamic_setting()
             # Reset the game statistics.
             self.stats.reset_stats()
             self.stats.game_active = True
@@ -140,6 +142,10 @@ class AlienInvasion:
             # Create a new fleet and center the ship.
             self._create_fleet()
             self.ship.center_ship()
+
+            # Hide the mouse cursor.
+            pygame.mouse.set_visible(False)
+
 
     def _fire_bullet(self):
         """Create a new bullet and add it to bullets group."""
@@ -168,6 +174,7 @@ class AlienInvasion:
             # Destroy existing bullets and create new fleet
             self.bullets.empty()
             self._create_fleet()
+            self.settings.increase_speed()
 
     def _update_aliens(self):
         """Check if the fleet is at an edge and then Update the position of all aliens in fleet."""
@@ -200,6 +207,7 @@ class AlienInvasion:
 
         else:
             self.stats.game_active = False
+            pygame.mouse.set_visible(True)
 
     def _check_aliens_bottom(self):
         """Check if any aliens have reached the bottom of the screen."""
